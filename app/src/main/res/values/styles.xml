@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tema de inicio -->
+    <style name="Color_base_azul" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/pantalla_carga</item>
+    </style>
+</resources>

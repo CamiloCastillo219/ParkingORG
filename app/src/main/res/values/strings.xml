@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Parking ORG</string>
+    <string name="Acceso_visita">Acceso visitantes</string>
+    <string name="parking_organization">PARKING ORGANIZATION</string>
+    <string name="correo_electr_nico">Correo electrónico</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="entrar">Entrar</string>
+    <string name="Login">Login</string>
+    <string name="registrar_cuenta">Registrar cuenta</string>
+    <string name="datos_de_usuario">Datos de usuario</string>
+    <string name="nombre_completo">Nombre completo</string>
+    <string name="contrase_a">Contraseña</string>
+    <string name="confirmar_contrase_a">Confirmar contraseña</string>
+    <string name="llave_de_acceso">Llave de acceso</string>
+    <string name="com_auth0_domain">dev-x5hctivk0wln8niq.us.auth0.com</string>
+    <string name="com_auth0_client_id">ErVq5o8HzUTXtEdw2KzVaYl5lelE3EkD</string>
+    <string name="pin_de_acceso">PIN de acceso</string>
+    <string name="ingrese_su_pin">Ingrese su PIN</string>
+    <string name="devolverse">devolverse</string>
+</resources>

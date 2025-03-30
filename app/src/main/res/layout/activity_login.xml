@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Letrabasicablanca"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <ImageView
+        android:id="@+id/LogoLogin"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.206"
+        app:srcCompat="@drawable/logo_propio_4_3" />
+
+    <TextView
+        android:id="@+id/Nombre_App"
+        android:layout_width="339dp"
+        android:layout_height="87dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inter_semibold"
+        android:gravity="center"
+        android:text="@string/parking_organization"
+        android:textColor="@color/Empresarialoscuro"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LogoLogin" />
+
+    <EditText
+        android:id="@+id/correoLogin"
+        android:layout_width="353dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/bordecolor"
+        android:ems="10"
+        android:fontFamily="@font/inter"
+        android:hint="@string/correo_electr_nico"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Nombre_App" />
+
+    <TextView
+        android:id="@+id/loginText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:fontFamily="@font/inter_semibold"
+        android:text="@string/Login"
+        android:textColor="@color/Negro"
+        app:layout_constraintBottom_toTopOf="@+id/correoLogin"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/EntryLogin"
+        android:layout_width="270dp"
+        android:layout_height="79dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/Empresarial"
+        android:fontFamily="@font/inter_semibold"
+        android:text="@string/entrar"
+        android:textAllCaps="false"
+        android:textColor="@color/Blanco"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/correoLogin" />
+
+    <ImageButton
+        android:id="@+id/RegistroLogin"
+        android:layout_width="79dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="28dp"
+        android:backgroundTint="@color/Empresarial"
+        android:src="@drawable/iconadd"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/EntryLogin"
+        app:layout_constraintTop_toBottomOf="@+id/correoLogin"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageView
+        android:id="@+id/helpbutton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/help_circle"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/Acceso_visitantes"
+        android:layout_width="143dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/Empresarial"
+        android:fontFamily="@font/inter"
+        android:text="@string/Acceso_visita"
+        android:textAllCaps="false"
+        android:textColor="@color/Blanco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.848"
+        app:layout_constraintStart_toEndOf="@+id/helpbutton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

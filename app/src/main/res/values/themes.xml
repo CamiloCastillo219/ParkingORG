@@ -1,0 +1,24 @@
+<resources>
+    <style name="Theme.WhiteBackground" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/white</item>
+        <!-- Otros atributos de estilo si es necesario -->
+    </style>
+
+    <style name="Color_azul_base" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/Empresarial</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="Letrabasicanegra" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/Negro</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/inter</item> <!-- Opcional -->
+    </style>
+
+    <style name="Letrabasicablanca" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/Blanco</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/inter</item> <!-- Opcional -->
+    </style>
+
+</resources>
