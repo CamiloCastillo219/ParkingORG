@@ -30,11 +30,13 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPassword = findViewById<EditText>(R.id.confirmarContraseña).text.toString()
 
             if (password == confirmPassword) {
-                // Enviar datos a PinActivity
-                val intent = Intent(this, pinActivity::class.java)
-                intent.putExtra("name", name)
-                intent.putExtra("email", email)
-                intent.putExtra("password", password)
+                // Enviar datos a PinActivity con "modo: Registro"
+                val intent = Intent(this, pinActivity::class.java).apply {
+                    putExtra("name", name)
+                    putExtra("email", email)
+                    putExtra("password", password)
+                    putExtra("modo", "Registro") // Agregamos el modo
+                }
                 startActivity(intent)
             } else {
                 showToast("Las contraseñas no coinciden")

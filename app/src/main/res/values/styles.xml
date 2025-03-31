@@ -4,4 +4,10 @@
     <style name="Color_base_azul" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/pantalla_carga</item>
     </style>
+    <style name="CircularButton">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:background">@drawable/circle_button</item>
+        <item name="android:layout_margin">8dp</item>  <!-- Separación entre botones -->
+    </style>
 </resources>
