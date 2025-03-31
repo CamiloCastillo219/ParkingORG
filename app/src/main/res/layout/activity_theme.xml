@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/titulo_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/alata"
+        android:text="@string/personaliza_tu_tarjeta_de_ingreso"
+        android:textColor="@color/Negro"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="290dp"
+        android:layout_height="290dp"
+        android:layout_marginTop="22dp"
+        android:src="@drawable/gris"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titulo_theme" />
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:columnCount="4"
+        android:padding="8dp"
+        android:rowCount="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+        <!-- Botones con colores y separación horizontal -->
+        <Button
+            android:id="@+id/button_1"
+            style="@style/CircularButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/circle_selector"
+            android:tag="#2997d8"
+            android:backgroundTint="#2997d8"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/button_2"
+            style="@style/CircularButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/circle_selector"
+            android:tag="#a9aac3"
+            android:backgroundTint="#a9aac3"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/button_3"
+            style="@style/CircularButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/circle_selector"
+            android:tag="#fdc99b"
+            android:backgroundTint="#fdc99b"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+
+        <Button
+            android:id="@+id/button_4"
+            style="@style/CircularButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/circle_selector"
+            android:tag="#c2e3da"
+            android:backgroundTint="#c2e3da"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/button_5"
+            style="@style/CircularButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/circle_selector"
+            android:layout_marginEnd="24dp"
+            android:tag="#cc4940"
+            android:backgroundTint="#cc4940"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/button_6"
+            style="@style/CircularButton"
+            android:layout_width="55dp"
+            android:background="@drawable/circle_selector"
+            android:layout_height="55dp"
+            android:layout_marginEnd="24dp"
+            android:tag="#facfc8"
+            android:backgroundTint="#facfc8"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/button_7"
+            style="@style/CircularButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/circle_selector"
+            android:layout_marginEnd="24dp"
+            android:tag="#7e388d"
+            android:backgroundTint="#7e388d"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/button_8"
+            style="@style/CircularButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/circle_selector"
+            android:tag="#fff5e3"
+            android:backgroundTint="#fff5e3"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+    </GridLayout>
+
+    <Button
+        android:id="@+id/confirmtheme"
+        android:layout_width="270dp"
+        android:layout_height="79dp"
+        android:layout_marginBottom="36dp"
+        android:backgroundTint="@color/Empresarial"
+        android:fontFamily="@font/alata"
+        android:text="@string/confirmar"
+        android:textAllCaps="false"
+        android:textColor="@color/Blanco"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

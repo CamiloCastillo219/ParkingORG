@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado cuando el botón está seleccionado -->
+    <item android:state_selected="true">
+        <shape android:shape="oval">
+            <solid android:color="?android:attr/colorBackground"/> <!-- Mantiene el color original -->
+            <stroke android:width="4dp" android:color="@color/Negro"/> <!-- Contorno al seleccionar -->
+        </shape>
+    </item>
+
+    <!-- Estado normal (sin selección) -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="?android:attr/colorBackground"/> <!-- Mantiene el color original -->
+        </shape>
+    </item>
+</selector>

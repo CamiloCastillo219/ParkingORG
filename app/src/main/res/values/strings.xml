@@ -17,4 +17,6 @@
     <string name="pin_de_acceso">PIN de acceso</string>
     <string name="ingrese_su_pin">Ingrese su PIN</string>
     <string name="devolverse">devolverse</string>
+    <string name="personaliza_tu_tarjeta_de_ingreso">Personaliza tu tarjeta de ingreso</string>
+    <string name="confirmar">confirmar</string>
 </resources>

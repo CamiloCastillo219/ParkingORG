@@ -7,52 +7,45 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.auth0.android.Auth0
-import com.auth0.android.authentication.AuthenticationAPIClient
-import com.auth0.android.callback.Callback
-import com.auth0.android.result.DatabaseUser
-import com.auth0.android.authentication.AuthenticationException
+import com.google.firebase.database.*
 
 class pinActivity : AppCompatActivity() {
 
     private var pin = ""
-    private var confirmPin = ""
+    private var pinConfirmacion: String? = null  // Segunda entrada para confirmar PIN
     private val maxPinLength = 4
-    private var isConfirming = false
     private lateinit var pinViews: List<TextView>
-    private lateinit var account: Auth0
-    private lateinit var name: String
-    private lateinit var email: String
-    private lateinit var password: String
+    private lateinit var database: DatabaseReference
+    private var email: String? = null
+    private var modo: String? = null  // Variable para diferenciar Registro y Acceso
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
 
-        // Recibe los datos de RegisterActivity
-        name = intent.getStringExtra("name") ?: ""
-        email = intent.getStringExtra("email") ?: ""
-        password = intent.getStringExtra("password") ?: ""
+        email = intent.getStringExtra("email")
+        modo = intent.getStringExtra("modo") ?: "Acceso"
 
-        account = Auth0(
-            getString(R.string.com_auth0_client_id),
-            getString(R.string.com_auth0_domain)
-        )
+        if (email.isNullOrEmpty()) {
+            Toast.makeText(this, "Error: Email no recibido", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        database = FirebaseDatabase.getInstance().reference
 
         // Inicializa los cuadros de PIN
         pinViews = listOf(
-            findViewById<TextView>(R.id.pin_view_1),
-            findViewById<TextView>(R.id.pin_view_2),
-            findViewById<TextView>(R.id.pin_view_3),
-            findViewById<TextView>(R.id.pin_view_4)
+            findViewById(R.id.pin_view_1),
+            findViewById(R.id.pin_view_2),
+            findViewById(R.id.pin_view_3),
+            findViewById(R.id.pin_view_4)
         )
 
-        // Configura los botones del numpad
         setupNumpad()
 
-        // Configura el botón de regreso
         findViewById<TextView>(R.id.back_button).setOnClickListener {
-            finish() // Regresa a la actividad anterior
+            finish()
         }
     }
 
@@ -88,41 +81,75 @@ class pinActivity : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.button_confirm).setOnClickListener {
             if (pin.length == maxPinLength) {
-                if (!isConfirming) {
-                    confirmPin = pin
-                    pin = ""
-                    updatePinViews()
-                    isConfirming = true
-                    Toast.makeText(this, "Confirme contraseña", Toast.LENGTH_SHORT).show()
-                } else {
-                    if (pin == confirmPin) {
-                        registerUser()
-                    } else {
-                        Toast.makeText(this, "PIN incorrecto, intentelo de nuevo", Toast.LENGTH_SHORT).show()
-                        pin = ""
-                        confirmPin = ""
-                        updatePinViews()
-                        isConfirming = false
-                    }
-                }
+                handlePinEntry()
+            } else {
+                Toast.makeText(this, "El PIN debe tener 4 dígitos", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun registerUser() {
-        val client = AuthenticationAPIClient(account)
-        client.createUser(email = email, password = password, connection = "Username-Password-Authentication")
-            .addParameter("name", name)
-            .start(object : Callback<DatabaseUser, AuthenticationException> {
-                override fun onSuccess(user: DatabaseUser) {
-                    Toast.makeText(this@pinActivity, "Registro completado", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@pinActivity, LoginActivity::class.java))
+    private fun handlePinEntry() {
+        if (modo == "Registro") {
+            if (pinConfirmacion == null) {
+                // Primer paso: Guardamos el PIN y pedimos confirmación
+                pinConfirmacion = pin
+                pin = ""
+                updatePinViews()
+                Toast.makeText(this, "Vuelve a ingresar el PIN para confirmarlo", Toast.LENGTH_SHORT).show()
+            } else {
+                // Segundo paso: Verificamos si coinciden
+                if (pin == pinConfirmacion) {
+                    registerUser()  // Guardamos el usuario en Firebase
+                } else {
+                    Toast.makeText(this, "Los PINs no coinciden. Inténtalo de nuevo", Toast.LENGTH_SHORT).show()
+                    pinConfirmacion = null
+                    pin = ""
+                    updatePinViews()
                 }
+            }
+        } else {
+            verifyPin()  // En modo Acceso, solo verificamos el PIN
+        }
+    }
 
-                override fun onFailure(exception: AuthenticationException) {
-                    Toast.makeText(this@pinActivity, "Error en el registro: ${exception.message}", Toast.LENGTH_SHORT).show()
+    private fun registerUser() {
+        val emailUser = email!!.substringBefore("@")
+        val userRef = database.child("usuarios").child(emailUser)
+
+        userRef.setValue(mapOf("email" to email, "pin" to pin))
+            .addOnSuccessListener {
+                Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
+                navigateToLogin() // Regresar a LoginActivity
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun verifyPin() {
+        val emailUser = email!!.substringBefore("@")
+        val userRef = database.child("usuarios").child(emailUser)
+
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val storedPin = snapshot.child("pin").getValue(String::class.java)
+
+                    if (storedPin == pin) {
+                        Toast.makeText(this@pinActivity, "Acceso autorizado", Toast.LENGTH_SHORT).show()
+                        navigateToHome()
+                    } else {
+                        Toast.makeText(this@pinActivity, "PIN incorrecto", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this@pinActivity, "Usuario no encontrado", Toast.LENGTH_SHORT).show()
                 }
-            })
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@pinActivity, "Error en la base de datos", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun updatePinViews() {
@@ -130,4 +157,18 @@ class pinActivity : AppCompatActivity() {
             pinViews[i].text = if (i < pin.length) "●" else ""
         }
     }
+
+    private fun navigateToHome() {
+        val intent = Intent(this, ThemeActivity::class.java)
+        intent.putExtra("email", email)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }
+

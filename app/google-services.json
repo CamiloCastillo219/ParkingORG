@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1097701978078",
+    "project_id": "parkingorg-53ab1",
+    "storage_bucket": "parkingorg-53ab1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1097701978078:android:a8ecd24f5bfbd57694774f",
+        "android_client_info": {
+          "package_name": "com.example.parkingorg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIi7Iq7c6aMvuDMWF0KNETGwiPKfvkxyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
