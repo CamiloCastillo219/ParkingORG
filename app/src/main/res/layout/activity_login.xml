@@ -38,7 +38,7 @@
         android:id="@+id/correoLogin"
         android:layout_width="353dp"
         android:layout_height="65dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="82dp"
         android:background="@drawable/bordecolor"
         android:ems="10"
         android:fontFamily="@font/inter"
@@ -76,7 +76,8 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/correoLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/correoLogin"
+        app:layout_constraintVertical_bias="0.169" />
 
     <ImageButton
         android:id="@+id/RegistroLogin"
@@ -88,8 +89,10 @@
         android:src="@drawable/iconadd"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/EntryLogin"
         app:layout_constraintTop_toBottomOf="@+id/correoLogin"
+        app:layout_constraintVertical_bias="0.169"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageView
