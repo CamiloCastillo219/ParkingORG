@@ -19,4 +19,10 @@
     <string name="devolverse">devolverse</string>
     <string name="personaliza_tu_tarjeta_de_ingreso">Personaliza tu tarjeta de ingreso</string>
     <string name="confirmar">confirmar</string>
+    <string name="tarjeta_de_ingreso">Tarjeta de ingreso</string>
+    <string name="historial">Historial</string>
+    <string name="tarjeta">Tarjeta</string>
+    <string name="a_adir">Añadir</string>
+    <string name="gestionar">gestionar</string>
+    <string name="emply_plate">--- ---</string>
 </resources>

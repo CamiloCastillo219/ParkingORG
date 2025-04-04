@@ -6,9 +6,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/logo_propio_4_3"
+        android:icon="@drawable/logo_close"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/logo_propio_4_3"
+        android:roundIcon="@drawable/logo_close"
         android:supportsRtl="true"
         android:theme="@style/Color_base_azul"
         tools:targetApi="31">
@@ -55,6 +55,13 @@
 
         <activity
             android:name=".pinActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi">
+        </activity>
+
+        <activity
+            android:name=".HomeActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi">
