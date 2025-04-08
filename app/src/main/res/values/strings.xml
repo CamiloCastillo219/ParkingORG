@@ -25,4 +25,8 @@
     <string name="a_adir">Añadir</string>
     <string name="gestionar">gestionar</string>
     <string name="emply_plate">--- ---</string>
+    <string name="opciones_de_gesti_n">Opciones de gestión</string>
+    <string name="eliminar_veh_culo">Eliminar vehículo</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="a_adir_veh_culo">Añadir vehículo</string>
 </resources>
