@@ -12,12 +12,12 @@ import com.google.firebase.database.*
 class pinActivity : AppCompatActivity() {
 
     private var pin = ""
-    private var pinConfirmacion: String? = null  // Segunda entrada para confirmar PIN
+    private var pinConfirmacion: String? = null
     private val maxPinLength = 4
     private lateinit var pinViews: List<TextView>
     private lateinit var database: DatabaseReference
     private var email: String? = null
-    private var modo: String? = null  // Variable para diferenciar Registro y Acceso
+    private var modo: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,6 @@ class pinActivity : AppCompatActivity() {
 
         database = FirebaseDatabase.getInstance().reference
 
-        // Inicializa los cuadros de PIN
         pinViews = listOf(
             findViewById(R.id.pin_view_1),
             findViewById(R.id.pin_view_2),
@@ -91,15 +90,14 @@ class pinActivity : AppCompatActivity() {
     private fun handlePinEntry() {
         if (modo == "Registro") {
             if (pinConfirmacion == null) {
-                // Primer paso: Guardamos el PIN y pedimos confirmación
                 pinConfirmacion = pin
                 pin = ""
                 updatePinViews()
                 Toast.makeText(this, "Vuelve a ingresar el PIN para confirmarlo", Toast.LENGTH_SHORT).show()
             } else {
-                // Segundo paso: Verificamos si coinciden
                 if (pin == pinConfirmacion) {
-                    registerUser()  // Guardamos el usuario en Firebase
+                    Toast.makeText(this, "PIN confirmado correctamente", Toast.LENGTH_SHORT).show()
+                    registerUser()
                 } else {
                     Toast.makeText(this, "Los PINs no coinciden. Inténtalo de nuevo", Toast.LENGTH_SHORT).show()
                     pinConfirmacion = null
@@ -108,18 +106,32 @@ class pinActivity : AppCompatActivity() {
                 }
             }
         } else {
-            verifyPin()  // En modo Acceso, solo verificamos el PIN
+            verifyPin()
         }
     }
 
     private fun registerUser() {
+        if (pinConfirmacion == null || pinConfirmacion!!.length != maxPinLength) {
+            Toast.makeText(this, "Error: PIN inválido", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val emailUser = email!!.substringBefore("@")
         val userRef = database.child("usuarios").child(emailUser)
 
-        userRef.setValue(mapOf("email" to email, "pin" to pin))
+        val userData = mapOf(
+            "email" to email,
+            "pin" to pinConfirmacion,
+            "FT" to true,
+            "vehiculos" to mapOf(
+                "--- ---" to mapOf("theme" to "default")
+            )
+        )
+
+        userRef.setValue(userData)
             .addOnSuccessListener {
                 Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
-                navigateToLogin() // Regresar a LoginActivity
+                navigateToLogin()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
@@ -134,10 +146,16 @@ class pinActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     val storedPin = snapshot.child("pin").getValue(String::class.java)
+                    val isFirstTime = snapshot.child("FT").getValue(Boolean::class.java) ?: false
 
                     if (storedPin == pin) {
                         Toast.makeText(this@pinActivity, "Acceso autorizado", Toast.LENGTH_SHORT).show()
-                        navigateToHome()
+                        if (isFirstTime) {
+                            userRef.child("FT").setValue(false)
+                            navigateToTheme()
+                        } else {
+                            navigateToHome()
+                        }
                     } else {
                         Toast.makeText(this@pinActivity, "PIN incorrecto", Toast.LENGTH_SHORT).show()
                     }
@@ -158,8 +176,15 @@ class pinActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToHome() {
+    private fun navigateToTheme() {
         val intent = Intent(this, ThemeActivity::class.java)
+        intent.putExtra("email", email)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navigateToHome() {
+        val intent = Intent(this, HomeActivity::class.java)
         intent.putExtra("email", email)
         startActivity(intent)
         finish()
@@ -167,8 +192,8 @@ class pinActivity : AppCompatActivity() {
 
     private fun navigateToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }
 }
-
