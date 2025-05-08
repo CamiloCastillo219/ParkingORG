@@ -3,10 +3,7 @@ package com.example.parkingorg
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 
@@ -16,6 +13,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var correoLogin: EditText
     private lateinit var entryLoginButton: Button
     private lateinit var registroLoginButton: ImageButton
+    private lateinit var accesoVisitantesBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,14 +23,21 @@ class LoginActivity : AppCompatActivity() {
         correoLogin = findViewById(R.id.correoLogin)
         entryLoginButton = findViewById(R.id.EntryLogin)
         registroLoginButton = findViewById(R.id.RegistroLogin)
+        accesoVisitantesBtn = findViewById(R.id.Acceso_visitantes)
 
-        // Botón de registro para ir a RegisterActivity
+        // Mostrar el dialog del PIN cuando se toca "Acceso de visitantes"
+        accesoVisitantesBtn.setOnClickListener {
+            val dialog = PinDialogFragment()
+            dialog.show(supportFragmentManager, "PinDialog")
+        }
+
+        // Ir a registro
         registroLoginButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
-        // Botón de login para verificar el correo en Firebase
+        // Verificar correo en Firebase
         entryLoginButton.setOnClickListener {
             val email = correoLogin.text.toString().trim()
 
@@ -45,15 +50,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun verificarUsuarioEnFirebase(email: String) {
-        val usuarioCorreo = email.substringBefore("@") // Extraer la parte antes del '@'
+        val usuarioCorreo = email.substringBefore("@")
 
         database.child(usuarioCorreo).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    // Si el usuario existe en Firebase, pasamos a la verificación del PIN
                     val intent = Intent(this@LoginActivity, pinActivity::class.java).apply {
                         putExtra("email", email)
-                        putExtra("modo", "Acceso") // Modo acceso
+                        putExtra("modo", "Acceso")
                     }
                     startActivity(intent)
                 } else {
@@ -68,4 +72,3 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 }
-

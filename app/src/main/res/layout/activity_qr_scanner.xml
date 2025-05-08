@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/barcode_scanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/Pregunta_de_puerta"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:background="@drawable/rounded_dialog_bg">
+
+            <TextView
+                android:id="@+id/mensaje_scroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Ask_door"
+                android:fontFamily="@font/alata"
+                android:textSize="16sp"
+                android:paddingBottom="16dp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:id="@+id/contenedor_botones_puertas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Botones para seleccionar la puerta -->
+                    <Button
+                        android:id="@+id/boton_entrada"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/entrada"
+                        android:fontFamily="@font/alata" />
+
+                    <Button
+                        android:id="@+id/boton_salida"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/salida"
+                        android:fontFamily="@font/alata" />
+                </LinearLayout>
+            </ScrollView>
+
+            <Button
+                android:id="@+id/boton_cerrar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/alata"
+                android:text="@string/cerrar"
+                android:backgroundTint="#cc4940"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

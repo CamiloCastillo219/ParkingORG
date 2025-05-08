@@ -96,7 +96,7 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageView
-        android:id="@+id/helpbutton"
+        android:id="@+id/lateralmenu"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="28dp"
@@ -120,8 +120,7 @@
         android:textColor="@color/Blanco"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.848"
-        app:layout_constraintStart_toEndOf="@+id/helpbutton"
+        app:layout_constraintStart_toEndOf="@+id/lateralmenu"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

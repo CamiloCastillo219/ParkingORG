@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_dialog_bg"
+    android:padding="20dp">
+
+    <!-- Campo de PIN -->
+    <TextView
+        android:id="@+id/pin_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/alata"
+        android:textColor="@color/Negro"
+        android:gravity="center"
+        android:text="Acceso a visitantes"
+        android:textSize="26sp" />
+
+    <TextView
+        android:id="@+id/leyenda_leer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/alata"
+        android:textColor="@color/Negro"
+        android:gravity="center"
+        android:text="Ingresa tu PIN de invitado"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/pin_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="6"
+        android:hint="******"
+        android:gravity="center"
+        android:textSize="20sp"/>
+
+    <ImageView
+        android:id="@+id/QRgen"
+        android:layout_width="235dp"
+        android:layout_height="233dp"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:elevation="3dp"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="18dp"
+        android:text="@string/devolverse"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="16sp"
+        tools:ignore="TouchTargetSizeCheck" />
+</LinearLayout>
+

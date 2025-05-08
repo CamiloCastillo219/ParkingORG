@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_dialog_bg"
+    android:padding="20dp">
+
+
+    <TextView
+        android:id="@+id/pin_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/alata"
+        android:textColor="@color/Negro"
+        android:gravity="center"
+        android:text="@string/codigo_de_invitaci_n"
+        android:textSize="26sp" />
+
+    <EditText
+        android:id="@+id/Invitation_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_bold"
+        android:maxLength="6"
+        android:hint="C O D E"
+        android:gravity="center"
+        android:textSize="20sp"/>
+
+    <ImageView
+        android:id="@+id/QRgen"
+        android:layout_width="235dp"
+        android:layout_height="233dp"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:elevation="3dp"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextClock
+        android:id="@+id/textClock"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="8dp"
+        android:text="@string/devolverse"
+        android:textColor="@color/Negro"
+        android:textSize="16sp"
+        tools:ignore="TouchTargetSizeCheck" />
+
+</LinearLayout>
+

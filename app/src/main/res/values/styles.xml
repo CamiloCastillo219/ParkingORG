@@ -10,4 +10,40 @@
         <item name="android:background">@drawable/circle_button</item>
         <item name="android:layout_margin">8dp</item>  <!-- Separación entre botones -->
     </style>
+    <style name="PinButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_rowWeight">1</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textColor">@color/Blanco</item>
+        <item name="android:backgroundTint">@color/Empresarial</item>
+        <item name="android:fontFamily">@font/alata</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="PinButtondelete">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_rowWeight">1</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:src">@drawable/ic_delete</item>
+        <item name="android:backgroundTint">@color/Rojo</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="PinButtoncorrect">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_rowWeight">1</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:src">@drawable/ic_confirm</item>
+        <item name="android:backgroundTint">@color/Verde</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+
+
 </resources>

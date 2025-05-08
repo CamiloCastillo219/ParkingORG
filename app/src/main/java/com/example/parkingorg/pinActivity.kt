@@ -118,14 +118,12 @@ class pinActivity : AppCompatActivity() {
 
         val emailUser = email!!.substringBefore("@")
         val userRef = database.child("usuarios").child(emailUser)
-
+        val chosen_actual = "--- ---"
         val userData = mapOf(
             "email" to email,
             "pin" to pinConfirmacion,
             "FT" to true,
-            "vehiculos" to mapOf(
-                "--- ---" to mapOf("theme" to "default")
-            )
+            "Chosen_plate" to chosen_actual
         )
 
         userRef.setValue(userData)

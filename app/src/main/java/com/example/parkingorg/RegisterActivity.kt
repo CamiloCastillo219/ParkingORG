@@ -35,6 +35,7 @@ class RegisterActivity : AppCompatActivity() {
                     putExtra("name", name)
                     putExtra("email", email)
                     putExtra("password", password)
+                    putExtra("fromRegister", true)
                     putExtra("modo", "Registro") // Agregamos el modo
                 }
                 startActivity(intent)
@@ -45,7 +46,7 @@ class RegisterActivity : AppCompatActivity() {
 
         val backArrow = findViewById<ImageView>(R.id.backarrow)
         backArrow.setOnClickListener {
-            finish() // Regresa a la actividad anterior
+            finish()
         }
     }
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <View
-        android:id="@+id/rectangle_2"
+        android:id="@+id/popupContent"
         android:layout_width="309dp"
         android:layout_height="526dp"
         android:background="@drawable/white_bg"
@@ -21,10 +21,10 @@
         android:layout_height="526dp"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="@id/rectangle_2"
-        app:layout_constraintEnd_toEndOf="@id/rectangle_2"
-        app:layout_constraintStart_toStartOf="@id/rectangle_2"
-        app:layout_constraintTop_toTopOf="@id/rectangle_2">
+        app:layout_constraintBottom_toBottomOf="@id/popupContent"
+        app:layout_constraintEnd_toEndOf="@id/popupContent"
+        app:layout_constraintStart_toStartOf="@id/popupContent"
+        app:layout_constraintTop_toTopOf="@id/popupContent">
 
         <!-- Parte Superior -->
         <LinearLayout

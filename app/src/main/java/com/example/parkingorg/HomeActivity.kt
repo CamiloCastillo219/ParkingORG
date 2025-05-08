@@ -1,135 +1,167 @@
 package com.example.parkingorg
 
-import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
+import PinHostDialogFragment
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
+import com.journeyapps.barcodescanner.BarcodeEncoder
+import android.graphics.Bitmap
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
-import com.google.zxing.common.BitMatrix
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+
 
 class HomeActivity : AppCompatActivity() {
-    private lateinit var tarjetaBase: ImageView
-    private lateinit var qrGen: ImageView
-    private lateinit var database: DatabaseReference
-    private var email: String? = null
-    private var mostrandoQR = false
-    private var imagenOriginal: Bitmap? = null
-    private lateinit var popup: FrameLayout
-    private lateinit var botonAñadir: Button
-    private lateinit var botonEliminar: Button
-    private lateinit var botonCerrar: Button
-    private lateinit var helpButton: Button
-    private lateinit var bottomNav: BottomNavigationView
 
-    private val themeColorHexMap = mapOf(
-        "azul" to "#2997d8",
-        "gris" to "#a9aac3",
-        "naranja" to "#fdc99b",
-        "verde" to "#c2e3da",
-        "rojo" to "#cc4940",
-        "rosa" to "#facfc8",
-        "morado" to "#7e388d",
-        "beige" to "#fff5e3"
-    )
+    private lateinit var emergenteContenedor: View
+    private lateinit var cerrarPopupButton: Button
+    private lateinit var email: String
+    private lateinit var currentUsername: String
+    private lateinit var database: DatabaseReference
+    private lateinit var matriculaHome: TextView
+    private lateinit var tarjetaImage: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        tarjetaBase = findViewById(R.id.TarjetaBase)
-        qrGen = findViewById(R.id.QRgen)
-        popup = findViewById(R.id.emergente_contenedor)
-        botonAñadir = findViewById(R.id.boton_añadir_vehiculo)
-        botonEliminar = findViewById(R.id.boton_eliminar_vehiculo)
-        botonCerrar = findViewById(R.id.boton_cerrar)
-        bottomNav = findViewById(R.id.bottom_navigation)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        emergenteContenedor = findViewById(R.id.emergente_contenedor)
+        cerrarPopupButton = findViewById(R.id.boton_cerrar)
+        val botonAñadirVehiculo = findViewById<Button>(R.id.boton_añadir_vehiculo)
 
-        qrGen.visibility = View.INVISIBLE
-        popup.visibility = View.GONE
+        matriculaHome = findViewById(R.id.Matricula_home)
 
-        email = intent.getStringExtra("email")
-        val user = email?.substringBefore("@") ?: return
+        email = intent.getStringExtra("email") ?: ""
+        currentUsername = email.substringBefore("@")
+
         database = FirebaseDatabase.getInstance().reference
-        val themeRef = database.child("usuarios").child(user).child("managed cars").child("--- ---").child("theme")
 
-        themeRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var theme = snapshot.getValue(String::class.java)?.lowercase()
-                if (theme.isNullOrBlank() || !themeColorHexMap.containsKey(theme)) {
-                    Toast.makeText(
-                        this@HomeActivity,
-                        "Tema no válido o no encontrado. Usando tema predeterminado.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    theme = "azul"
-                }
+        emergenteContenedor.visibility = View.GONE
+        tarjetaImage = findViewById(R.id.TarjetaBase)
 
-                val resId = resources.getIdentifier(theme, "drawable", packageName)
-
-                if (resId != 0) {
-                    tarjetaBase.setImageResource(resId)
-                    tarjetaBase.post {
-                        tarjetaBase.isDrawingCacheEnabled = true
-                        tarjetaBase.buildDrawingCache()
-                        imagenOriginal = (tarjetaBase.drawable as? BitmapDrawable)?.bitmap
-                    }
-                } else {
-                    Toast.makeText(this@HomeActivity, "Recurso de tema no encontrado", Toast.LENGTH_SHORT).show()
-                }
-
-                val color1 = themeColorHexMap[theme] ?: "#000000"
-                val color2 = "#7e388d"
-
-                val toggleQR: () -> Unit = {
-                    mostrandoQR = !mostrandoQR
-
-                    if (mostrandoQR) {
-                        val qrTexto = generarTextoQR()
-                        val logo = BitmapFactory.decodeResource(resources, R.drawable.logo_propio_4_3)
-                        val qrBitmap = generarQRPersonalizado(qrTexto, 700, color1, color2, Color.WHITE, logo)
-                        qrGen.setImageBitmap(qrBitmap)
-                        qrGen.visibility = View.VISIBLE
-                    } else {
-                        qrGen.visibility = View.INVISIBLE
-                    }
-                }
-
-                tarjetaBase.setOnClickListener { toggleQR() }
-                qrGen.setOnClickListener { toggleQR() }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@HomeActivity, "Error al cargar el tema", Toast.LENGTH_SHORT).show()
-            }
-        })
-
-        // Manejo de botones
-        botonAñadir.setOnClickListener {
-            popup.visibility = View.VISIBLE
+        cerrarPopupButton.setOnClickListener {
+            emergenteContenedor.visibility = View.GONE
         }
 
-        botonCerrar.setOnClickListener {
-            popup.visibility = View.GONE
+        botonAñadirVehiculo.setOnClickListener {
+            val intent = Intent(this@HomeActivity, RegisterCarActivity::class.java)
+            intent.putExtra("email", email)
+            startActivity(intent)
         }
 
-        // Bottom Navigation acciones
-        bottomNav.setOnItemSelectedListener { item: MenuItem ->
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val menuButton = findViewById<ImageView>(R.id.lateralmenu)
+
+        menuButton.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.END)
+        }
+
+        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.Personalizar_tarjeta -> {
+                    val intent = Intent(this@HomeActivity, ChangeThemeActivity::class.java)
+                    intent.putExtra("email", email)
+                    intent.putExtra("matricula", matriculaHome.text.toString())
+                    startActivity(intent)
+                }
+                R.id.Codigo_invitado -> {
+                    val dialog = PinHostDialogFragment()
+                    val args = Bundle()
+                    args.putString("usuario", currentUsername) //
+                    args.putString("matricula", matriculaHome.text.toString())
+                    dialog.arguments = args
+                    dialog.show(supportFragmentManager, "PinHostDialog")
+                }
+                R.id.Cerrar_cuenta -> {
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                R.id.Modo_escaner -> {
+                    val intent = Intent(this, QrScannerActivity::class.java)
+                    intent.putExtra("email", email)
+                    startActivity(intent)
+                }
+                R.id.Configuracion -> {
+                    // Otra acción
+                }
+            }
+            drawerLayout.closeDrawer(GravityCompat.END)
+            true
+        }
+
+        val historialdirection = findViewById<ImageView>(R.id.Historial)
+
+        historialdirection.setOnClickListener {
+            val intent = Intent(this, HistorialActivity::class.java)
+            intent.putExtra("email", email)
+            intent.putExtra("matricula", matriculaHome.text.toString())
+            startActivity(intent)
+
+        }
+
+
+
+        val qrImageView = findViewById<ImageView>(R.id.QRgen)
+
+        qrImageView.alpha = 0f
+
+        qrImageView.setOnClickListener {
+            val placa = matriculaHome.text.toString()
+
+            if (placa == "Sin vehículo asignado") {
+                Toast.makeText(this, "No hay vehículo asignado para generar el QR", Toast.LENGTH_SHORT).show()
+                qrImageView.alpha = 0f
+                return@setOnClickListener
+            }
+
+            if (qrImageView.alpha == 0f) {
+                val horaActual = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+                val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                val contenidoQR = "$currentUsername,$placa,$fechaActual,$horaActual"
+
+                try {
+                    val barcodeEncoder = BarcodeEncoder()
+                    val bitmap: Bitmap = barcodeEncoder.encodeBitmap(contenidoQR, BarcodeFormat.QR_CODE, 400, 400)
+                    qrImageView.setImageBitmap(bitmap)
+
+                    // Hacemos fade-in animado
+                    qrImageView.animate().alpha(1f).setDuration(500).start()
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Error al generar QR", Toast.LENGTH_SHORT).show()
+                    e.printStackTrace()
+                }
+            } else {
+                qrImageView.animate().alpha(0f).setDuration(500).start()
+            }
+        }
+
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.TarjetaBoton -> {
-                    Toast.makeText(this, "Vista de Tarjeta", Toast.LENGTH_SHORT).show()
-                    popup.visibility = View.GONE
+                    ocultarPopup()
                     true
                 }
                 R.id.GestionarBoton -> {
-                    popup.visibility = View.VISIBLE
+                    mostrarPopup()
                     true
                 }
                 else -> false
@@ -137,66 +169,119 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun generarTextoQR(): String {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
-        val fechaHora = dateFormat.format(Date())
-        return "Generado el: $fechaHora\nMensaje de prueba"
+    override fun onResume() {
+        super.onResume()
+        cargarDatosDelVehiculoElegido()
     }
 
-    private fun generarQRPersonalizado(
-        texto: String,
-        tamaño: Int = 350,
-        color1Hex: String,
-        color2Hex: String,
-        colorFondo: Int,
-        logo: Bitmap? = null
-    ): Bitmap {
-        val color1 = Color.parseColor(color1Hex)
-        val color2 = Color.parseColor(color2Hex)
+    private fun cargarDatosDelVehiculoElegido() {
+        val chosenPlateRef = database.child("usuarios").child(currentUsername).child("Chosen_plate")
 
-        val bitMatrix: BitMatrix = MultiFormatWriter().encode(texto, BarcodeFormat.QR_CODE, tamaño, tamaño)
-        val bmp = Bitmap.createBitmap(tamaño, tamaño, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bmp)
-        canvas.drawColor(colorFondo)
+        chosenPlateRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val placaElegida = snapshot.getValue(String::class.java)
 
-        val gradient = LinearGradient(
-            0f, 0f, 0f, tamaño.toFloat(),
-            color1, color2, Shader.TileMode.CLAMP
-        )
+                if (!placaElegida.isNullOrBlank() && placaElegida != "--__") {
+                    val vehiculoRef = database.child("usuarios").child(currentUsername)
+                        .child("managed_cars").child(placaElegida)
 
-        val paint = Paint().apply {
-            shader = gradient
-            style = Paint.Style.FILL
-            isAntiAlias = false
-        }
+                    vehiculoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(carSnapshot: DataSnapshot) {
+                            val theme = carSnapshot.child("theme").getValue(String::class.java)
+                            matriculaHome.text = placaElegida
+                            tarjetaImage.setImageResource(resources.getIdentifier(theme, "drawable", packageName))
+                        }
 
-        for (x in 0 until bitMatrix.width) {
-            for (y in 0 until bitMatrix.height) {
-                if (bitMatrix[x, y]) {
-                    canvas.drawRect(
-                        x.toFloat(), y.toFloat(),
-                        (x + 1).toFloat(), (y + 1).toFloat(),
-                        paint
-                    )
+                        override fun onCancelled(error: DatabaseError) {
+                            Toast.makeText(this@HomeActivity, "Error al cargar datos del vehículo: ${error.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                } else {
+                    matriculaHome.text = "Sin vehículo asignado"
                 }
             }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@HomeActivity, "Error al leer Chosen_plate: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun mostrarPopup() {
+        emergenteContenedor.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+            animate().alpha(1f).setDuration(100).start()
         }
 
-        logo?.let {
-            val scaledLogo = Bitmap.createScaledBitmap(it, tamaño / 5, tamaño / 5, false)
-            val centerX = (bmp.width - scaledLogo.width) / 2
-            val centerY = (bmp.height - scaledLogo.height) / 2
-            canvas.drawBitmap(scaledLogo, centerX.toFloat(), centerY.toFloat(), null)
-        }
+        val contenedorBotones = findViewById<LinearLayout>(R.id.contenedor_botones_matriculas)
+        val managedCarsRef = database.child("usuarios").child(currentUsername).child("managed_cars")
 
-        val rounded = Bitmap.createBitmap(tamaño, tamaño, Bitmap.Config.ARGB_8888)
-        val roundedCanvas = Canvas(rounded)
-        val roundedPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        val rectF = RectF(0f, 0f, tamaño.toFloat(), tamaño.toFloat())
-        roundedCanvas.drawRoundRect(rectF, 60f, 60f, roundedPaint)
-        roundedPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-        roundedCanvas.drawBitmap(bmp, 0f, 0f, roundedPaint)
+        contenedorBotones.removeAllViews()
 
-        return rounded
+        managedCarsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                for (carSnapshot in snapshot.children) {
+                    val matricula = carSnapshot.key ?: continue
+
+                    val fila = LinearLayout(this@HomeActivity)
+                    fila.orientation = LinearLayout.HORIZONTAL
+                    fila.layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        topMargin = 8
+                    }
+
+                    val botonMatricula = Button(this@HomeActivity)
+                    botonMatricula.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                    botonMatricula.text = matricula
+                    botonMatricula.setBackgroundResource(android.R.drawable.btn_default)
+                    botonMatricula.setTextColor(resources.getColor(R.color.Negro, theme))
+                    botonMatricula.typeface = ResourcesCompat.getFont(this@HomeActivity, R.font.alata)
+
+                    botonMatricula.setOnClickListener {
+                        val chosenPlateRef = database.child("usuarios").child(currentUsername).child("Chosen_plate")
+                        chosenPlateRef.setValue(matricula).addOnSuccessListener {
+                            Toast.makeText(this@HomeActivity, "Vehículo '$matricula' seleccionado", Toast.LENGTH_SHORT).show()
+                            cargarDatosDelVehiculoElegido()
+                            ocultarPopup()
+                        }.addOnFailureListener {
+                            Toast.makeText(this@HomeActivity, "Error al seleccionar vehículo", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    val botonEliminar = Button(this@HomeActivity)
+                    botonEliminar.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    botonEliminar.text = "❌"
+                    botonEliminar.setOnClickListener {
+                        val vehiculoRef = database.child("usuarios").child(currentUsername).child("managed_cars").child(matricula)
+                        vehiculoRef.removeValue().addOnSuccessListener {
+                            Toast.makeText(this@HomeActivity, "Vehículo '$matricula' eliminado", Toast.LENGTH_SHORT).show()
+                            mostrarPopup() // recargar lista
+                        }.addOnFailureListener {
+                            Toast.makeText(this@HomeActivity, "Error al eliminar vehículo", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    fila.addView(botonMatricula)
+                    fila.addView(botonEliminar)
+
+                    contenedorBotones.addView(fila)
+                }
+            }
+
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@HomeActivity, "Error al cargar matrículas", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun ocultarPopup() {
+        emergenteContenedor.animate().alpha(0f).setDuration(80).withEndAction {
+            emergenteContenedor.visibility = View.GONE
+        }.start()
     }
 }
