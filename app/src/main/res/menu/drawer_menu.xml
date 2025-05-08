@@ -3,5 +3,4 @@
     <item android:id="@+id/Codigo_invitado" android:title="@string/generar_codigo_de_invitaci_n"/>
     <item android:id="@+id/Cerrar_cuenta" android:title="@string/cerrar_secci_n"/>
     <item android:id="@+id/Modo_escaner" android:title="@string/modo_escaner"/>
-    <item android:id="@+id/Configuracion" android:title="@string/configuraci_n"/>
 </menu>

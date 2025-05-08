@@ -99,9 +99,6 @@ class HomeActivity : AppCompatActivity() {
                     intent.putExtra("email", email)
                     startActivity(intent)
                 }
-                R.id.Configuracion -> {
-                    // Otra acción
-                }
             }
             drawerLayout.closeDrawer(GravityCompat.END)
             true
