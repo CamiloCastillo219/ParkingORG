@@ -11,29 +11,27 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
 
-class ThemeActivity : AppCompatActivity() {
+class ChangeThemeActivity : AppCompatActivity() {
 
     private lateinit var previewImage: ImageView
     private lateinit var confirmButton: Button
     private var email: String? = null
     private var themeName: String? = null
     private var selectedButton: Button? = null
-    private var fromRegister: Boolean = false
     private var matricula: String? = null
-
+    private var currentTheme: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_theme)
 
-        fromRegister = intent.getBooleanExtra("fromRegister", false)
-
-
         previewImage = findViewById(R.id.imageView)
         confirmButton = findViewById(R.id.confirmtheme)
+
+        // Obtener datos desde el Intent
         email = intent.getStringExtra("email")
         matricula = intent.getStringExtra("matricula")
-
+        currentTheme = intent.getStringExtra("theme") // Puede ser null si no se pasó
 
         val colorConfig = mapOf(
             R.id.button_1 to Triple("#2997d8", R.drawable.azul, "azul"),
@@ -57,29 +55,43 @@ class ThemeActivity : AppCompatActivity() {
             findViewById<Button>(R.id.button_8)
         )
 
+        // Listener para cada botón de tema
         buttons.forEach { button ->
             button.setOnClickListener {
-                selectedButton?.let { prevButton ->
-                    prevButton.setBackgroundResource(R.drawable.button_default)
-                    resizeButton(prevButton, 96)
-                }
-
-                selectedButton = button
-                button.setBackgroundResource(R.drawable.button_selected)
-                resizeButton(button, 96)
-
-                val (color, drawable, name) = colorConfig[button.id] ?: return@setOnClickListener
-                themeName = name
-
-                confirmButton.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(color))
-                confirmButton.setTextColor(getColorText(button.id))
-                previewImage.setImageResource(drawable)
+                selectThemeButton(button, colorConfig)
             }
         }
 
+        // Preseleccionar el tema actual si existe
+        currentTheme?.let { theme ->
+            colorConfig.entries.find { it.value.third == theme }?.let { entry ->
+                val button = findViewById<Button>(entry.key)
+                selectThemeButton(button, colorConfig)
+            }
+        }
+
+        // Confirmar selección
         confirmButton.setOnClickListener {
             saveTheme()
         }
+    }
+
+    private fun selectThemeButton(button: Button, colorConfig: Map<Int, Triple<String, Int, String>>) {
+        selectedButton?.let { prevButton ->
+            prevButton.setBackgroundResource(R.drawable.button_default)
+            resizeButton(prevButton, 96)
+        }
+
+        selectedButton = button
+        button.setBackgroundResource(R.drawable.button_selected)
+        resizeButton(button, 96)
+
+        val (color, drawable, name) = colorConfig[button.id] ?: return
+        themeName = name
+
+        confirmButton.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(color))
+        confirmButton.setTextColor(getColorText(button.id))
+        previewImage.setImageResource(drawable)
     }
 
     private fun saveTheme() {
@@ -88,34 +100,29 @@ class ThemeActivity : AppCompatActivity() {
             return
         }
 
-        val userId = email?.substringBefore("@") ?: return
-        val ref = FirebaseDatabase.getInstance().reference.child("usuarios").child(userId)
+        val userId = email?.substringBefore("@")
+        val carKey = matricula ?: "--- ---"
 
-        val carKey = if (!matricula.isNullOrBlank()) matricula!! else "--- ---"
+        if (userId == null) {
+            Toast.makeText(this, "Error: Email inválido", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        val carRef = ref.child("managed_cars").child(carKey)
+        val carRef = FirebaseDatabase.getInstance()
+            .reference.child("usuarios").child(userId)
+            .child("managed_cars").child(carKey)
 
-        val data = mapOf(
-            "theme" to themeName,
-            "FT" to true
-        )
+        val data = mapOf("theme" to themeName)
 
-        val successMsg = if (fromRegister) "Tema guardado correctamente" else "Tema actualizado correctamente"
-        val errorMsg = if (fromRegister) "Error al guardar el tema" else "Error al actualizar el tema"
-
-        // Si viene del registro, usamos setValue (crear), si no, updateChildren (modificar)
-        val action = carRef.updateChildren(data)
-
-        action
+        carRef.updateChildren(data)
             .addOnSuccessListener {
-                Toast.makeText(this, successMsg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Tema actualizado correctamente", Toast.LENGTH_SHORT).show()
                 navigateToHome()
             }
             .addOnFailureListener {
-                Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error al actualizar el tema", Toast.LENGTH_SHORT).show()
             }
     }
-
 
     private fun resizeButton(button: Button, newSize: Int) {
         val params = button.layoutParams as ViewGroup.LayoutParams
