@@ -1,5 +1,7 @@
+package com.example.parkingorg
+
 data class HistorialItem(
-    val id: String, // <-- este será el key de Firebase
+    val id: String,
     val fecha: String,
     val hora: String,
     val tipo: String,
@@ -7,5 +9,6 @@ data class HistorialItem(
     val anio: String,
     val direccion: String,
     val ticket: String,
+    val typeaccess: String = "",
     var isExpanded: Boolean = false
 )

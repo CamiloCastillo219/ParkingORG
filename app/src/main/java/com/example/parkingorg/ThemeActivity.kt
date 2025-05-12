@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
+import androidx.core.graphics.toColorInt
 
 class ThemeActivity : AppCompatActivity() {
 
@@ -48,13 +49,13 @@ class ThemeActivity : AppCompatActivity() {
 
         val buttons = listOf(
             findViewById<Button>(R.id.button_1),
-            findViewById<Button>(R.id.button_2),
-            findViewById<Button>(R.id.button_3),
-            findViewById<Button>(R.id.button_4),
-            findViewById<Button>(R.id.button_5),
-            findViewById<Button>(R.id.button_6),
-            findViewById<Button>(R.id.button_7),
-            findViewById<Button>(R.id.button_8)
+            findViewById(R.id.button_2),
+            findViewById(R.id.button_3),
+            findViewById(R.id.button_4),
+            findViewById(R.id.button_5),
+            findViewById(R.id.button_6),
+            findViewById(R.id.button_7),
+            findViewById(R.id.button_8)
         )
 
         buttons.forEach { button ->
@@ -71,7 +72,7 @@ class ThemeActivity : AppCompatActivity() {
                 val (color, drawable, name) = colorConfig[button.id] ?: return@setOnClickListener
                 themeName = name
 
-                confirmButton.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(color))
+                confirmButton.backgroundTintList = android.content.res.ColorStateList.valueOf(color.toColorInt())
                 confirmButton.setTextColor(getColorText(button.id))
                 previewImage.setImageResource(drawable)
             }

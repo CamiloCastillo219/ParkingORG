@@ -85,29 +85,6 @@
                 android:padding="12dp"
                 android:textColorHint="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/Key_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/inter_semibold"
-                android:text="Llave de registro"
-                android:textColor="@color/Negro" />
-
-            <EditText
-                android:id="@+id/Obtener_llave"
-                android:layout_width="353dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="6dp"
-                android:background="@drawable/bordecolor"
-                android:ems="10"
-                android:fontFamily="@font/inter"
-                android:hint="@string/llave_de_acceso"
-                android:inputType="textPersonName"
-                android:padding="12dp"
-                android:textColorHint="@android:color/darker_gray" />
-
         </LinearLayout>
 
     </ScrollView>
@@ -116,7 +93,7 @@
         android:id="@+id/confirmarRegistroButton"
         android:layout_width="270dp"
         android:layout_height="79dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="24dp"
         android:backgroundTint="@color/Empresarial"
         android:fontFamily="@font/inter_semibold"
         android:text="Confirmar Registro"

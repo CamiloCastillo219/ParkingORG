@@ -95,32 +95,18 @@
         app:layout_constraintVertical_bias="0.169"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <ImageView
-        android:id="@+id/lateralmenu"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="24dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/help_circle"
-        tools:ignore="SpeakableTextPresentCheck" />
-
     <Button
         android:id="@+id/Acceso_visitantes"
         android:layout_width="143dp"
         android:layout_height="48dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:backgroundTint="@color/Empresarial"
         android:fontFamily="@font/inter"
         android:text="@string/Acceso_visita"
         android:textAllCaps="false"
         android:textColor="@color/Blanco"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.848"
-        app:layout_constraintStart_toEndOf="@+id/lateralmenu"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

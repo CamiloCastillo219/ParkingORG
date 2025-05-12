@@ -57,4 +57,6 @@
     <string name="ingreso">Ingreso ›</string>
     <string name="codigo_de_invitaci_n">Codigo de invitación</string>
     <string name="sin_registro">Sin vehículo asignado</string>
+    <string name="tipo_de_acceso">Tipo de acceso</string>
+    <string name="propietario">Propietario</string>
 </resources>

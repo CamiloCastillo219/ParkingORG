@@ -2,13 +2,14 @@ package com.example.parkingorg
 
 import android.animation.ValueAnimator
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import com.google.firebase.database.FirebaseDatabase
 
 class ChangeThemeActivity : AppCompatActivity() {
@@ -28,10 +29,9 @@ class ChangeThemeActivity : AppCompatActivity() {
         previewImage = findViewById(R.id.imageView)
         confirmButton = findViewById(R.id.confirmtheme)
 
-        // Obtener datos desde el Intent
         email = intent.getStringExtra("email")
         matricula = intent.getStringExtra("matricula")
-        currentTheme = intent.getStringExtra("theme") // Puede ser null si no se pasó
+        currentTheme = intent.getStringExtra("theme")
 
         val colorConfig = mapOf(
             R.id.button_1 to Triple("#2997d8", R.drawable.azul, "azul"),
@@ -44,25 +44,14 @@ class ChangeThemeActivity : AppCompatActivity() {
             R.id.button_8 to Triple("#fff5e3", R.drawable.beige, "beige")
         )
 
-        val buttons = listOf(
-            findViewById<Button>(R.id.button_1),
-            findViewById<Button>(R.id.button_2),
-            findViewById<Button>(R.id.button_3),
-            findViewById<Button>(R.id.button_4),
-            findViewById<Button>(R.id.button_5),
-            findViewById<Button>(R.id.button_6),
-            findViewById<Button>(R.id.button_7),
-            findViewById<Button>(R.id.button_8)
-        )
+        val buttons = colorConfig.keys.map { findViewById<Button>(it) }
 
-        // Listener para cada botón de tema
         buttons.forEach { button ->
             button.setOnClickListener {
                 selectThemeButton(button, colorConfig)
             }
         }
 
-        // Preseleccionar el tema actual si existe
         currentTheme?.let { theme ->
             colorConfig.entries.find { it.value.third == theme }?.let { entry ->
                 val button = findViewById<Button>(entry.key)
@@ -70,7 +59,6 @@ class ChangeThemeActivity : AppCompatActivity() {
             }
         }
 
-        // Confirmar selección
         confirmButton.setOnClickListener {
             saveTheme()
         }
@@ -89,13 +77,14 @@ class ChangeThemeActivity : AppCompatActivity() {
         val (color, drawable, name) = colorConfig[button.id] ?: return
         themeName = name
 
-        confirmButton.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(color))
-        confirmButton.setTextColor(getColorText(button.id))
+        confirmButton.backgroundTintList = android.content.res.ColorStateList.valueOf(color.toColorInt())
+        confirmButton.setTextColor(getTextColor(button.id))
         previewImage.setImageResource(drawable)
     }
 
     private fun saveTheme() {
-        if (themeName == null) {
+        val name = themeName
+        if (name == null) {
             Toast.makeText(this, "Selecciona un tema primero", Toast.LENGTH_SHORT).show()
             return
         }
@@ -103,7 +92,7 @@ class ChangeThemeActivity : AppCompatActivity() {
         val userId = email?.substringBefore("@")
         val carKey = matricula ?: "--- ---"
 
-        if (userId == null) {
+        if (userId.isNullOrEmpty()) {
             Toast.makeText(this, "Error: Email inválido", Toast.LENGTH_SHORT).show()
             return
         }
@@ -112,9 +101,7 @@ class ChangeThemeActivity : AppCompatActivity() {
             .reference.child("usuarios").child(userId)
             .child("managed_cars").child(carKey)
 
-        val data = mapOf("theme" to themeName)
-
-        carRef.updateChildren(data)
+        carRef.updateChildren(mapOf("theme" to name))
             .addOnSuccessListener {
                 Toast.makeText(this, "Tema actualizado correctamente", Toast.LENGTH_SHORT).show()
                 navigateToHome()
@@ -126,25 +113,30 @@ class ChangeThemeActivity : AppCompatActivity() {
 
     private fun resizeButton(button: Button, newSize: Int) {
         val params = button.layoutParams as ViewGroup.LayoutParams
-        val animator = ValueAnimator.ofInt(params.width, newSize)
-        animator.duration = 200
-        animator.addUpdateListener { animation ->
-            val value = animation.animatedValue as Int
-            params.width = value
-            params.height = value
-            button.layoutParams = params
+        ValueAnimator.ofInt(params.width, newSize).apply {
+            duration = 200
+            addUpdateListener { animation ->
+                val value = animation.animatedValue as Int
+                params.width = value
+                params.height = value
+                button.layoutParams = params
+            }
+            start()
         }
-        animator.start()
     }
 
     private fun navigateToHome() {
-        val intent = Intent(this, HomeActivity::class.java)
-        intent.putExtra("email", email)
+        val intent = Intent(this, HomeActivity::class.java).apply {
+            putExtra("email", email)
+        }
         startActivity(intent)
         finish()
     }
 
-    private fun getColorText(buttonId: Int): Int {
-        return if (buttonId in listOf(R.id.button_5, R.id.button_7, R.id.button_1)) Color.WHITE else Color.BLACK
+    private fun getTextColor(buttonId: Int): Int {
+        return if (buttonId in listOf(R.id.button_1, R.id.button_5, R.id.button_7))
+            ContextCompat.getColor(this, android.R.color.white)
+        else
+            ContextCompat.getColor(this, android.R.color.black)
     }
 }

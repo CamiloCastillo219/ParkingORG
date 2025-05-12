@@ -50,16 +50,16 @@ class pinActivity : AppCompatActivity() {
 
     private fun setupNumpad() {
         val buttons = listOf(
-            findViewById<Button>(R.id.button_0),
-            findViewById<Button>(R.id.button_1),
+            findViewById(R.id.button_0),
+            findViewById(R.id.button_1),
             findViewById<Button>(R.id.button_2),
-            findViewById<Button>(R.id.button_3),
-            findViewById<Button>(R.id.button_4),
-            findViewById<Button>(R.id.button_5),
-            findViewById<Button>(R.id.button_6),
-            findViewById<Button>(R.id.button_7),
-            findViewById<Button>(R.id.button_8),
-            findViewById<Button>(R.id.button_9)
+            findViewById(R.id.button_3),
+            findViewById(R.id.button_4),
+            findViewById(R.id.button_5),
+            findViewById(R.id.button_6),
+            findViewById(R.id.button_7),
+            findViewById(R.id.button_8),
+            findViewById(R.id.button_9)
         )
 
         for (button in buttons) {
@@ -118,12 +118,12 @@ class pinActivity : AppCompatActivity() {
 
         val emailUser = email!!.substringBefore("@")
         val userRef = database.child("usuarios").child(emailUser)
-        val chosen_actual = "--- ---"
+        val chosenActual = "--- ---"
         val userData = mapOf(
             "email" to email,
             "pin" to pinConfirmacion,
             "FT" to true,
-            "Chosen_plate" to chosen_actual
+            "Chosen_plate" to chosenActual
         )
 
         userRef.setValue(userData)

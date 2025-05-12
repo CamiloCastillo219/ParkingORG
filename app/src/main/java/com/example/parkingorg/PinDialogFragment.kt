@@ -3,6 +3,7 @@ package com.example.parkingorg
 import android.app.Dialog
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -15,6 +16,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("DEPRECATION")
 class PinDialogFragment : DialogFragment() {
 
     private lateinit var pinEditText: EditText
@@ -28,18 +30,14 @@ class PinDialogFragment : DialogFragment() {
         dialog.setContentView(R.layout.pin_dialog_layout)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        // Referencias
         pinEditText = dialog.findViewById(R.id.pin_edit_text)
         pinleyendText = dialog.findViewById(R.id.leyenda_leer)
         qrImageView = dialog.findViewById(R.id.QRgen)
 
-        // Ocultamos el QR al inicio
         qrImageView.visibility = View.GONE
 
-        // Base de datos
         database = FirebaseDatabase.getInstance().reference
 
-        // Verificación del PIN
         pinEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val pin = s.toString()
@@ -50,7 +48,6 @@ class PinDialogFragment : DialogFragment() {
                             if (snapshot.exists()) {
                                 Toast.makeText(context, "Código de invitación correcto", Toast.LENGTH_SHORT).show()
 
-                                // Ocultar campo y mostrar QR
                                 pinEditText.visibility = View.GONE
                                 pinleyendText.visibility = View.GONE
                                 qrImageView.visibility = View.VISIBLE
@@ -58,13 +55,26 @@ class PinDialogFragment : DialogFragment() {
 
                                 val hora = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
                                 val fecha = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-                                val contenidoQR = "${snapshot.value},$fecha,$hora"
+                                val tipoAcceso = "visitante"
+                                val contenidoQR = "${snapshot.value},$fecha,$hora,$tipoAcceso"
 
                                 try {
                                     val barcodeEncoder = BarcodeEncoder()
                                     val bitmap: Bitmap = barcodeEncoder.encodeBitmap(contenidoQR, BarcodeFormat.QR_CODE, 400, 400)
                                     qrImageView.setImageBitmap(bitmap)
                                     Log.d("QR_GENERATION", "QR generado con éxito.")
+
+
+                                    Handler().postDelayed({
+                                        ref.removeValue()
+                                            .addOnSuccessListener {
+                                                Log.d("PIN_DELETE", "Código eliminado exitosamente después de 1 minuto.")
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.e("PIN_DELETE_ERROR", "Error al eliminar el código: ${e.message}")
+                                            }
+                                    }, 60_000)
+
                                 } catch (e: Exception) {
                                     Toast.makeText(context, "Error al generar QR", Toast.LENGTH_SHORT).show()
                                     Log.e("QR_ERROR", "Error generando QR", e)

@@ -30,13 +30,12 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPassword = findViewById<EditText>(R.id.confirmarContraseña).text.toString()
 
             if (password == confirmPassword) {
-                // Enviar datos a PinActivity con "modo: Registro"
                 val intent = Intent(this, pinActivity::class.java).apply {
                     putExtra("name", name)
                     putExtra("email", email)
                     putExtra("password", password)
                     putExtra("fromRegister", true)
-                    putExtra("modo", "Registro") // Agregamos el modo
+                    putExtra("modo", "Registro")
                 }
                 startActivity(intent)
             } else {

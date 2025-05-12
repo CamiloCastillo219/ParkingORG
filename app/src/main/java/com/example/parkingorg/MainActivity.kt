@@ -17,20 +17,16 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // Configurar el listener para los insets de la ventana
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Usar un Handler para ejecutar un retraso de 2 segundos
         Handler(Looper.getMainLooper()).postDelayed({
-            // Crear un Intent para iniciar LogoCargaActivity
             val intent = Intent(this, LogoCargaActivity::class.java)
             startActivity(intent)
-            // Finalizar la actividad actual si no deseas que el usuario pueda volver a ella
             finish()
-        }, 2000) // 2000 milisegundos = 2 segundos
+        }, 2000)
     }
 }

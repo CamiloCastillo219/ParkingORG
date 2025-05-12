@@ -1,8 +1,7 @@
 package com.example.parkingorg
 
-import PinHostDialogFragment
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -42,7 +41,7 @@ class HomeActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         emergenteContenedor = findViewById(R.id.emergente_contenedor)
         cerrarPopupButton = findViewById(R.id.boton_cerrar)
-        val botonAñadirVehiculo = findViewById<Button>(R.id.boton_añadir_vehiculo)
+        val añadirVehiculo = findViewById<Button>(R.id.boton_añadir_vehiculo)
 
         matriculaHome = findViewById(R.id.Matricula_home)
 
@@ -58,7 +57,7 @@ class HomeActivity : AppCompatActivity() {
             emergenteContenedor.visibility = View.GONE
         }
 
-        botonAñadirVehiculo.setOnClickListener {
+        añadirVehiculo.setOnClickListener {
             val intent = Intent(this@HomeActivity, RegisterCarActivity::class.java)
             intent.putExtra("email", email)
             startActivity(intent)
@@ -130,9 +129,10 @@ class HomeActivity : AppCompatActivity() {
             }
 
             if (qrImageView.alpha == 0f) {
+                val tipoAcceso = "propietario"
                 val horaActual = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
                 val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-                val contenidoQR = "$currentUsername,$placa,$fechaActual,$horaActual"
+                val contenidoQR = "$currentUsername,$placa,$fechaActual,$horaActual,$tipoAcceso"
 
                 try {
                     val barcodeEncoder = BarcodeEncoder()
@@ -175,6 +175,7 @@ class HomeActivity : AppCompatActivity() {
         val chosenPlateRef = database.child("usuarios").child(currentUsername).child("Chosen_plate")
 
         chosenPlateRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            @SuppressLint("SetTextI18n")
             override fun onDataChange(snapshot: DataSnapshot) {
                 val placaElegida = snapshot.getValue(String::class.java)
 
@@ -183,6 +184,7 @@ class HomeActivity : AppCompatActivity() {
                         .child("managed_cars").child(placaElegida)
 
                     vehiculoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        @SuppressLint("DiscouragedApi")
                         override fun onDataChange(carSnapshot: DataSnapshot) {
                             val theme = carSnapshot.child("theme").getValue(String::class.java)
                             matriculaHome.text = placaElegida

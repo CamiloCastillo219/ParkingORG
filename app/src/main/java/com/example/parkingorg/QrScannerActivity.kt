@@ -35,8 +35,7 @@ class QrScannerActivity : AppCompatActivity() {
         barcodeView = findViewById(R.id.barcode_scanner)
         database = FirebaseDatabase.getInstance().reference
 
-        // Inicializa el email y currentUsername
-        val email = "usuario@example.com" // Reemplaza con el email real
+        val email = "usuario@example.com"
         currentUsername = email.substringBefore("@")
 
         val emergenteContenedor = findViewById<FrameLayout>(R.id.Pregunta_de_puerta)
@@ -44,7 +43,6 @@ class QrScannerActivity : AppCompatActivity() {
         val botonSalida = findViewById<Button>(R.id.boton_salida)
         val botonCerrar = findViewById<Button>(R.id.boton_cerrar)
 
-        // Mostrar el popup al inicio
         emergenteContenedor.visibility = View.VISIBLE
 
         botonEntrada.setOnClickListener {
@@ -87,10 +85,10 @@ class QrScannerActivity : AppCompatActivity() {
                         val matricula = partes[1]
                         val fecha = partes[2]
                         val hora = partes[3]
+                        val Access = partes[4]
 
-                        enviarDatosABaseDeDatos(usuarios, matricula, fecha, hora, tipoAcceso)
+                        enviarDatosABaseDeDatos(usuarios, matricula, fecha, hora, tipoAcceso, Access)
 
-                        // Pausar el escáner para evitar lecturas múltiples
                         barcodeView.pause()
                     } else {
                         Toast.makeText(this@QrScannerActivity, "Formato de QR incorrecto", Toast.LENGTH_SHORT).show()
@@ -103,7 +101,7 @@ class QrScannerActivity : AppCompatActivity() {
         barcodeView.resume()
     }
 
-    private fun enviarDatosABaseDeDatos(usuario: String, matricula: String, fecha: String, hora: String, tipo: String) {
+    private fun enviarDatosABaseDeDatos(usuario: String, matricula: String, fecha: String, hora: String, tipo: String, Access: String) {
         val historialRef = database.child("usuarios").child(usuario).child("managed_cars").child(matricula).child("Historial")
 
         historialRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -115,7 +113,8 @@ class QrScannerActivity : AppCompatActivity() {
                 val registro = mapOf(
                     "fecha" to fecha,
                     "hora" to hora,
-                    "tipo" to tipo
+                    "tipo" to tipo,
+                    "tipoAcceso" to Access
                 )
 
                 historialRef.child(registroId).setValue(registro)

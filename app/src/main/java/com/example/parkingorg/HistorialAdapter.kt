@@ -1,6 +1,5 @@
 package com.example.parkingorg
 
-import HistorialItem
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,15 +14,15 @@ class HistorialAdapter(
     private val matricula: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val VIEW_TYPE_COMPACTO = 0
-    private val VIEW_TYPE_EXPANDIDO = 1
+    private val viewMinimo = 0
+    private val viewExpandido = 1
 
     override fun getItemViewType(position: Int): Int {
-        return if (historialList[position].isExpanded) VIEW_TYPE_EXPANDIDO else VIEW_TYPE_COMPACTO
+        return if (historialList[position].isExpanded) viewExpandido else viewMinimo
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == VIEW_TYPE_COMPACTO) {
+        return if (viewType == viewMinimo) {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_historial, parent, false)
             CompactoViewHolder(view)
         } else {
@@ -62,6 +61,7 @@ class HistorialAdapter(
         private val anio: TextView = itemView.findViewById(R.id.text_anio)
         private val direccion: TextView = itemView.findViewById(R.id.text_direccion)
         private val ticket: TextView = itemView.findViewById(R.id.text_ticket)
+        private val typeaccess: TextView = itemView.findViewById(R.id.typeaccess)
         private val cerrar: ImageView = itemView.findViewById(R.id.btn_cerrar)
         private val eliminar: TextView = itemView.findViewById(R.id.btn_eliminar)
 
@@ -71,6 +71,7 @@ class HistorialAdapter(
             anio.text = item.anio
             direccion.text = item.direccion
             ticket.text = item.ticket
+            typeaccess.text = item.typeaccess
 
             cerrar.setOnClickListener {
                 item.isExpanded = false
@@ -84,7 +85,7 @@ class HistorialAdapter(
                     .child("managed_cars")
                     .child(matricula)
                     .child("Historial")
-                    .child(item.id) // Asegúrate de que tu modelo tenga el campo id
+                    .child(item.id)
 
                 ref.removeValue().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -93,14 +94,9 @@ class HistorialAdapter(
                             historialList.removeAt(pos)
                             notifyItemRemoved(pos)
                         }
-                    } else {
-                        // Maneja el error si lo deseas
                     }
                 }
             }
-
-
         }
-
     }
 }

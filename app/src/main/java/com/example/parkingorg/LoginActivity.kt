@@ -25,19 +25,16 @@ class LoginActivity : AppCompatActivity() {
         registroLoginButton = findViewById(R.id.RegistroLogin)
         accesoVisitantesBtn = findViewById(R.id.Acceso_visitantes)
 
-        // Mostrar el dialog del PIN cuando se toca "Acceso de visitantes"
         accesoVisitantesBtn.setOnClickListener {
             val dialog = PinDialogFragment()
             dialog.show(supportFragmentManager, "PinDialog")
         }
 
-        // Ir a registro
         registroLoginButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
-        // Verificar correo en Firebase
         entryLoginButton.setOnClickListener {
             val email = correoLogin.text.toString().trim()
 

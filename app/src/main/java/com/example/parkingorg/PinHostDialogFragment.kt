@@ -1,3 +1,6 @@
+package com.example.parkingorg
+
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.LayoutInflater
@@ -9,7 +12,6 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.example.parkingorg.R
 
 class PinHostDialogFragment : DialogFragment() {
 
@@ -33,28 +35,22 @@ class PinHostDialogFragment : DialogFragment() {
         pinEditText.isFocusable = false
         pinEditText.isClickable = false
 
-        // Inicializa la base de datos
         database = FirebaseDatabase.getInstance().reference
 
-        // Recupera argumentos
         val usuario = arguments?.getString("usuario") ?: ""
         val matricula = arguments?.getString("matricula") ?: ""
 
-        // Genera y muestra el código
         val pin = (100000..999999).random().toString()
         pinEditText.setText(pin)
 
-        // Guarda el código en Firebase
         if (usuario.isNotEmpty() && matricula.isNotEmpty()) {
             val ref = database.child("Codigos_inv")
                 .child(pin)
             ref.setValue("$usuario,$matricula")
         }
 
-        // Iniciar cuenta regresiva
         iniciarCuentaRegresiva()
 
-        // Botón para cerrar manualmente el diálogo
         backButton.setOnClickListener {
             timer.cancel()
             dismiss()
@@ -65,6 +61,7 @@ class PinHostDialogFragment : DialogFragment() {
 
     private fun iniciarCuentaRegresiva() {
         timer = object : CountDownTimer(30_000, 1000) {
+            @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 val seconds = millisUntilFinished / 1000
                 countdownTextClock.text = "Expira en: $seconds s"

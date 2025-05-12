@@ -1,6 +1,6 @@
 package com.example.parkingorg
 
-import HistorialItem
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -36,7 +36,6 @@ class HistorialActivity : AppCompatActivity() {
         tarjetaImagen = findViewById(R.id.header_image)
         emergenteContenedor = findViewById(R.id.emergente_contenedor)
 
-        // Inicializar RecyclerView
         recyclerView = findViewById(R.id.recycler_historial)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -80,12 +79,14 @@ class HistorialActivity : AppCompatActivity() {
             .child("Historial")
 
         historialRef.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
                 historialList.clear()
                 for (registroSnapshot in snapshot.children) {
                     val fecha = registroSnapshot.child("fecha").getValue(String::class.java) ?: ""
                     val hora = registroSnapshot.child("hora").getValue(String::class.java) ?: ""
                     val tipo = registroSnapshot.child("tipo").getValue(String::class.java) ?: ""
+                    val Access = registroSnapshot.child("tipoAcceso").getValue(String::class.java) ?: ""
                     val ticket = registroSnapshot.key ?: ""
 
                     val partesFecha = fecha.split("-")
@@ -100,7 +101,8 @@ class HistorialActivity : AppCompatActivity() {
                         dia = dia,
                         anio = anio,
                         direccion = tipo,
-                        ticket = ticket
+                        ticket = ticket,
+                        typeaccess = Access
                     )
 
                     historialList.add(item)
@@ -132,6 +134,7 @@ class HistorialActivity : AppCompatActivity() {
                         .child("managed_cars").child(placaElegida)
 
                     vehiculoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        @SuppressLint("DiscouragedApi")
                         override fun onDataChange(carSnapshot: DataSnapshot) {
                             val theme = carSnapshot.child("theme").getValue(String::class.java)
                             tarjetaImagen.setImageResource(resources.getIdentifier(theme, "drawable", packageName))
