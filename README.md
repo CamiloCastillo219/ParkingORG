@@ -20,23 +20,19 @@
 
 - **Kotlin** — Lenguaje de desarrollo nativo para Android.
 - **Firebase** — Servicios utilizados:
-  - Firebase Authentication
-  - Realtime Database
-  - Firestore
-  - Cloud Storage (opcional según configuración)
+  - Firebase Authentication.
+  - Realtime Database.
+  - Firestore.
 
 ---
 
 ## Instalación
 
-No se requieren configuraciones adicionales para instalar la aplicación. Para ejecutarla localmente:
+No se requieren configuraciones adicionales para instalar la aplicación. Para ejecutarla localmente, dado a que solo hay una rama, no requiere otras instrucciones:
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/CamiloCastillo219/ParkingORG
 
-# Abrir el proyecto en Android Studio
-# Esperar a que se sincronicen las dependencias y ejecutar en un emulador o dispositivo físico.
+git clone https://github.com/CamiloCastillo219/ParkingORG
 
 ```
 ---
